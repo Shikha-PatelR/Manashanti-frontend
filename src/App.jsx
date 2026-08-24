@@ -10,7 +10,7 @@ function App() {
     setLoading(true);
 
     // FIX 1: yahan 'message' bhejna hai, 'text' nahi
-    const response = await fetch("http://localhost:8000/ask", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/ask`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: input, text: input }), // dono bhej diye taaki kabhi error na aaye
