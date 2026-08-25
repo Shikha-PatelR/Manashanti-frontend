@@ -77,9 +77,33 @@ function App() {
           }}>
             <p><b>🙋 You:</b> {item.question}</p>
             <hr style={{margin: "10px 0"}}/>
-            <p><b>📖 Sanskrit:</b> {item.answer.sanskrit || "Loading..."}</p>
-            <p><b>🇮🇳 Hindi:</b> {item.answer.hindi}</p>
-            <p><b>🇬🇧 English:</b> {item.answer.english}</p>
+            <div style={{ marginTop: "20px", border: "1px solid #ccc", padding: "15px", borderRadius: "10px", background: "#f9f9f9" }}>
+  <h3 style={{ color: "green" }}>Detected: {data.emotion}</h3>
+  
+  <p><b>Manashanti says:</b> {data.support}</p>
+  
+  <div style={{ background: "#e3f2fd", padding: "10px", borderRadius: "8px", margin: "10px 0" }}>
+    <b>💡 Real Life Example:</b><br/>
+    {data.example}
+  </div>
+
+  <hr />
+  <p><b>Sanskrit:</b> {data.shloka.sanskrit}</p>
+  <p><b>Hindi:</b> {data.shloka.hindi}</p>
+  <p><b>English:</b> {data.shloka.english}</p>
+  <p><b>Reference:</b> {data.shloka.reference}</p>
+
+  <div style={{ background: "#fff8e1", padding: "10px", borderRadius: "8px", marginTop: "10px" }}>
+    <b>📖 Arjun-Krishna Story:</b><br/>
+    {data.shloka.story}
+  </div>
+
+  <div style={{ background: "#f3e5f5", padding: "10px", borderRadius: "8px", marginTop: "10px" }}>
+    <b>🧘 Deep Explanation:</b><br/>
+    {data.shloka.explanation}
+  </div>
+</div>
+        
             
             {/* FIX 2: YAHAN EDIT KIYA - Source dikhega */}
             <p><b>📚 Reference:</b> Chapter {item.answer.chapter}, Verse {item.answer.verse}</p>
