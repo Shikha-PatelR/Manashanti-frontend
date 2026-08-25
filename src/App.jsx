@@ -1,14 +1,14 @@
 import { useState } from 'react';
+import './App.css';
 
 function App() {
   const [text, setText] = useState("");
-  const [data, setData] = useState(null);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const getGitaWisdom = async () => {
     if(!text) return;
     setLoading(true);
-    setData(null);
     try {
       const res = await fetch("https://manashanti-backend.vercel.app/get-gita", {
         method: "POST",
@@ -16,52 +16,58 @@ function App() {
         body: JSON.stringify({ text: text })
       });
       const result = await res.json();
-      setData(result);
-    } catch (e) {
-      alert("Backend error");
-    }
+      setHistory([{ input: text, ...result }, ...history]);
+      setText("");
+    } catch (e) { console.log(e); }
     setLoading(false);
   };
 
   return (
-    <div style={{ maxWidth: "650px", margin: "30px auto", fontFamily: "Arial", padding: "20px" }}>
-      <h1>Manashanti - Gita for Peace</h1>
-      <p>Apna man ka haal likho...</p>
+    <div className="app-container" style={{background: "linear-gradient(to right, #fff5e6, #ffb88c)", minHeight: "100vh", padding: "20px", textAlign: "center"}}>
+      <h1 style={{color: "#ff6b35"}}>🧘 ManaShanti - Ask Gita</h1>
+      <p style={{background: "#fff3cd", display: "inline-block", padding: "8px 15px", borderRadius: "10px"}}>
+        "Arjun jaisa confusion, <span style={{color: "#ff6b35"}}>Krishna jaisa solution</span>" ✨
+      </p>
       
-      <div style={{display: "flex", gap: "10px"}}>
+      <div style={{marginTop: "20px"}}>
         <input 
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="eg: I am feeling sad today"
-          style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "1px solid #ccc" }}
+          placeholder="Share your feeling... anxious, sad, angry"
+          style={{ width: "400px", padding: "12px", borderRadius: "10px", border: "none", background: "#3a3a3a", color: "white"}}
         />
-        <button onClick={getGitaWisdom} style={{ padding: "12px 20px", borderRadius: "8px", background: "#4CAF50", color: "white", border: "none" }}>
-          {loading ? "..." : "Ask Gita"}
+        <button onClick={getGitaWisdom} style={{marginLeft: "10px", padding: "12px 20px", borderRadius: "10px", background: "#4a2c2a", color: "white", border: "none", cursor: "pointer"}}>
+          {loading ? "..." : "Ask"}
         </button>
       </div>
 
-      {data && (
-        <div style={{ marginTop: "25px", border: "1px solid #ddd", padding: "20px", borderRadius: "12px", background: "#fafafa" }}>
-          <h3 style={{ color: "#2e7d32" }}>Emotion: {data.emotion}</h3>
-          <p><b>Manashanti says:</b> {data.support}</p>
-          <div style={{ background: "#e3f2fd", padding: "12px", borderRadius: "8px", margin: "12px 0" }}>
-            <b>💡 Real Life:</b> {data.example}
+      <button onClick={()=> setHistory([])} style={{marginTop: "15px", padding: "8px 15px", borderRadius: "8px", background: "#ff7f7f", border: "none", color: "white"}}>Clear History 🗑️</button>
+
+      <div style={{marginTop: "30px", display: "flex", flexDirection: "column", alignItems: "center", gap: "20px"}}>
+        {history.map((data, idx) => (
+          <div key={idx} style={{background: "white", width: "550px", padding: "20px", borderRadius: "15px", boxShadow: "0 4px 10px rgba(0,0,0,0.1)"}}>
+            <p><b>🐿️ You:</b> {data.input}</p>
+            <hr/>
+            <p style={{textAlign: "left"}}><b>💚 Manashanti says:</b> {data.support}</p>
+            <p style={{textAlign: "left", background: "#e3f2fd", padding: "10px", borderRadius: "8px"}}><b>💡 Example:</b> {data.example}</p>
+            
+            <p>📖 <b>Sanskrit:</b> {data.shloka.sanskrit}</p>
+            <p>IN <b>Hindi:</b> {data.shloka.hindi}</p>
+            <p>GB <b>English:</b> {data.shloka.english}</p>
+            <p>📚 <b>Reference:</b> {data.shloka.reference}</p>
+            
+            <div style={{background: "#fff8e1", padding: "10px", borderRadius: "8px", marginTop: "10px", textAlign: "left"}}>
+              <b>Story:</b> {data.shloka.story}
+            </div>
+            <div style={{background: "#f3e5f5", padding: "10px", borderRadius: "8px", marginTop: "10px", textAlign: "left"}}>
+              <b>Deep Meaning:</b> {data.shloka.explanation}
+            </div>
+            
+            <p style={{fontSize: "12px", color: "gray", marginTop: "10px"}}>Source: Gita DB | Emotion: {data.emotion}</p>
           </div>
-          <hr />
-          <p><b>Sanskrit:</b> {data.shloka.sanskrit}</p>
-          <p><b>Hindi:</b> {data.shloka.hindi}</p>
-          <p><b>English:</b> {data.shloka.english}</p>
-          <p><b>Ref:</b> {data.shloka.reference}</p>
-          <div style={{ background: "#fff8e1", padding: "12px", borderRadius: "8px", marginTop: "12px" }}>
-            <b>📖 Story:</b> {data.shloka.story}
-          </div>
-          <div style={{ background: "#f3e5f5", padding: "12px", borderRadius: "8px", marginTop: "12px" }}>
-            <b>🧘 Explanation:</b> {data.shloka.explanation}
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
-
 export default App;
