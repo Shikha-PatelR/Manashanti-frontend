@@ -29,16 +29,13 @@ function App() {
         "Arjun jaisa confusion, <span style={{color: "#ff6b35"}}>Krishna jaisa solution</span>" ✨
       </p>
       
-              <div style={{
-          width: "100vw",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center", // ye center me layega
-          justifyContent: "flex-start",
-          padding: "40px 20px",
-          background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fdba74 100%)"
-        }}>
+      <div style={{marginTop: "20px"}}>
+        <input 
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Share your feeling... anxious, sad, angry"
+          style={{ width: "400px", padding: "12px", borderRadius: "10px", border: "none", background: "#3a3a3a", color: "white"}}
+        />
         <button onClick={getGitaWisdom} style={{marginLeft: "10px", padding: "12px 20px", borderRadius: "10px", background: "#4a2c2a", color: "white", border: "none", cursor: "pointer"}}>
           {loading ? "..." : "Ask"}
         </button>
