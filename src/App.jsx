@@ -15,80 +15,81 @@ export default function App() {
         body: JSON.stringify({ text }),
       });
       const data = await res.json();
-      setHistory([{ q: text,...data },...history]);
+      setHistory([{ q: text, ...data }, ...history]);
       setText("");
-    } catch (e) {
-      alert("Backend error, check API");
-    }
+    } catch(e){}
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#fdfbf7] text-[#1a2e2a] flex flex-col" style={{fontFamily: 'Inter, sans-serif'}}>
-      {/* NAV - Full Width */}
-      <nav className="w-full flex justify-between items-center px-6 md:px-12 py-4 bg-white/80 backdrop-blur sticky top-0 z-10 border-b border-[#f0ebe3]">
-        <h1 className="font-bold text-xl">🧘 ManaShanti</h1>
-        <div className="flex gap-3 items-center">
-          <span className="hidden md:block text-sm text-gray-500">Emotion → Gita Wisdom</span>
-          <button onClick={()=>setHistory([])} className="bg-[#1a2e2a] text-white px-4 py-2 rounded-full text-sm">Clear</button>
+    <div style={{
+      minHeight: "100vh",
+      width: "100vw", // FULL WINDOW FIX
+      maxWidth: "100%",
+      background: "#0f172a",
+      color: "white",
+      fontFamily: "Inter, sans-serif",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      padding: "0",
+      margin: "0",
+      boxSizing: "border-box",
+      overflowX: "hidden"
+    }}>
+      <div style={{ width: "100%", maxWidth: "800px", padding: "20px", boxSizing: "border-box" }}>
+        
+        <h1 style={{ textAlign: "center", fontSize: "32px", fontWeight: "bold" }}>🧘 ManaShanti</h1>
+        <p style={{ textAlign: "center", color: "#94a3b8", marginTop: "5px" }}>Emotion → Gita Wisdom</p>
+        <p style={{ textAlign: "center", letterSpacing: "2px", fontSize: "12px", marginTop: "10px", color: "#cbd5e1" }}>CLEAR MIND • REAL PEACE</p>
+        
+        <h2 style={{ textAlign: "center", fontSize: "24px", marginTop: "15px", lineHeight: "1.3" }}>Every emotion deserves<br/>a clear path forward.</h2>
+        <p style={{ textAlign: "center", color: "#94a3b8", fontSize: "14px", marginTop: "10px" }}>
+          Share what you feel. Get Gita-based support, real-life example, and a story that heals.
+        </p>
+
+        {/* INPUT - Now responsive */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center", marginTop: "25px", width: "100%" }}>
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e)=> e.key==="Enter" && askGita()}
+            placeholder="I am feeling anxious, sad, angry..."
+            style={{ 
+              flex: "1", minWidth: "200px", maxWidth: "100%",
+              padding: "12px 15px", borderRadius: "10px", border: "none", 
+              fontSize: "16px" // 16px prevents auto-zoom on phone
+            }}
+          />
+          <button 
+            onClick={askGita} 
+            style={{ padding: "12px 20px", borderRadius: "10px", background: "#f8fafc", color: "#0f172a", border: "none", fontWeight: "bold" }}>
+            {loading ? "..." : "Ask Gita →"}
+          </button>
         </div>
-      </nav>
 
-      {/* HERO - Full Window */}
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-16 grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <div className="inline-block bg-white border border-[#eee] px-3 py-1 rounded-full text-[11px] tracking-widest mb-4">CLEAR MIND • REAL PEACE</div>
-          <h2 className="text-4xl md:text-6xl font-bold leading-[1.05]">
-            Every emotion deserves <br/> <span className="text-[#d86c4a]">a clear path forward.</span>
-          </h2>
-          <p className="text-gray-500 mt-4 text-base md:text-lg max-w-lg">Share what you feel. Get Gita-based support, real-life example, and a story that heals.</p>
+        {/* RESULTS */}
+        <div style={{ marginTop: "30px", width: "100%", display: "flex", flexDirection: "column", gap: "20px" }}>
+          {history.map((d, i) => (
+            <div key={i} style={{ background: "#1e293b", borderRadius: "16px", padding: "20px", textAlign: "left", wordWrap: "break-word" }}>
+              <p style={{ fontSize: "12px", letterSpacing: "1px", color: "#94a3b8" }}>YOUR JOURNEY • {d.shloka?.reference}</p>
+              <p style={{ fontWeight: "bold", marginTop: "8px" }}>" {d.q.toUpperCase()} "</p>
+              
+              <p style={{ marginTop: "15px" }}>🐾 <b>Support:</b></p>
+              <p style={{ color: "#cbd5e1", fontSize: "14px", marginTop: "5px" }}>{d.support}</p>
 
-          {/* INPUT - Auto resize on phone */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full">
-            <input
-              value={text}
-              onChange={(e)=>setText(e.target.value)}
-              onKeyDown={(e)=> e.key==='Enter' && askGita()}
-              placeholder="I am feeling anxious, sad, angry..."
-              className="flex-1 w-full px-5 py-4 rounded-2xl border border-[#ddd] bg-white outline-none focus:border-[#1a2e2a] text-[16px]"
-            />
-            <button onClick={askGita} className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#1a2e2a] text-white font-medium whitespace-nowrap">
-              {loading? "..." : "Ask Gita →"}
-            </button>
-          </div>
-        </div>
+              <p style={{ marginTop: "15px" }}>💡 <b>Real Example:</b></p>
+              <p style={{ color: "#cbd5e1", fontSize: "14px", marginTop: "5px" }}>{d.example}</p>
 
-        <div className="hidden md:flex justify-center">
-          <div className="w-[320px] h-[320px] bg-gradient-to-br from-[#fff1e6] to-[#ffe4d1] rounded-[40px] flex items-center justify-center text-8xl">🕉️</div>
-        </div>
-      </div>
+              <p style={{ marginTop: "15px", fontStyle: "italic", fontSize: "14px" }}>"{d.shloka?.hindi}"</p>
+              <p style={{ fontSize: "13px", color: "#94a3b8", marginTop: "5px" }}>{d.shloka?.english}</p>
+              <p style={{ fontSize: "13px", marginTop: "10px" }}>{d.shloka?.story}</p>
 
-      {/* RESULTS - Full width responsive cards */}
-      <div className="w-full max-w-4xl mx-auto px-4 md:px-8 pb-20 flex flex-col gap-6">
-        {history.map((d,i)=>(
-          <div key={i} className="w-full bg-white rounded-[24px] p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-[#f0ebe3]">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-[11px] tracking-widest text-gray-400">YOUR JOURNEY • {d.emotion?.toUpperCase()}</span>
-              <span className="bg-[#fdf0e6] text-[#d86c4a] text-xs px-3 py-1 rounded-full">{d.shloka?.reference}</span>
+              <p style={{ marginTop: "15px" }}><b>Deep Meaning:</b></p>
+              <p style={{ color: "#cbd5e1", fontSize: "14px", marginTop: "5px" }}>{d.shloka?.explanation}</p>
             </div>
-
-            <p className="font-medium mb-5">❝ {d.q} ❞</p>
-
-            <div className="grid gap-4">
-              <div className="bg-[#f8faf8] p-4 rounded-xl"><b className="text-sm">🌿 Support:</b><p className="text-sm text-gray-600 mt-1">{d.support}</p></div>
-              <div className="bg-[#f5f9ff] p-4 rounded-xl"><b className="text-sm">💡 Real Example:</b><p className="text-sm text-gray-600 mt-1">{d.example}</p></div>
-              <div className="bg-[#fffaf0] p-4 rounded-xl border-l-4 border-[#d86c4a]">
-                <p className="font-bold text-sm italic">"{d.shloka?.hindi}"</p>
-                <p className="text-xs text-gray-500 mt-1">{d.shloka?.english}</p>
-                <p className="text-xs mt-2">{d.shloka?.story}</p>
-              </div>
-              <div className="bg-[#1a2e2a] text-white p-4 rounded-xl text-sm">
-                <b>Deep Meaning:</b> {d.shloka?.explanation}
-              </div>
-            </div>
-          </div>
-        ))}
-        {history.length===0 && <p className="text-center text-gray-400 mt-10">Your reflections will appear here...</p>}
+          ))}
+        </div>
       </div>
     </div>
   );
