@@ -72,7 +72,7 @@ export default function App() {
           <div style={{ textAlign: "center" }}>
             <h1 style={{ fontSize: "50px", color: "#f97316", fontWeight: "800" }}>🧘 ManaShanti</h1>
             <p style={{ fontSize: "22px", color: "#1f2937", marginTop: "10px", fontWeight: "600" }}>Ready when you are.</p>
-            <p style={{ color: "#6b7280", marginTop: "6px" }}>Ask Gita, Find Shanti ✨</p>
+            <p style={{ color: "#6b7280", marginTop: "6px" }}>Arjuna Jaisi Confusion,Krishna Jaisa Solution ✨</p>
           </div>
         ) : (
           <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "22px", alignItems: "center" }}>
