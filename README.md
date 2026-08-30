@@ -1,16 +1,19 @@
-# React + Vite
+# 🧘 ManaShanti - Arjun Jaisi Confusion, Krishna Jaisa Solution
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**Live Demo:** https://manashanti-frontend.vercel.app
+**Backend API:** https://manashanti-backend.vercel.app/docs
 
-Currently, two official plugins are available:
+ManaShanti is an AI-powered mental wellness platform that connects user emotions with the teachings of Bhagavad Gita.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+When a user shares their feeling (sad, happy, anxious, angry, lonely), the system detects the emotion using NLP and provides:
+1. Emotional Support - A caring response
+2. Real-life Example - Relatable daily life example  
+3. Gita Shloka - Relevant verse in Sanskrit, Hindi and English with exact PDF reference
+4. Story & Deep Meaning - Practical life lesson from Arjun's story
 
-## React Compiler
+**Objective:** To provide clear, non-judgmental mental guidance rooted in Indian wisdom, similar to modern accountability platforms like Resolve360 but focused on inner peace. Clean, modern UI inspired by premium SaaS design.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Tech Stack:** React + Vite | FastAPI | Both Gita PDFs as Source of Truth | Vercel
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+**Gita Mapping:**
+- sad -> 2.14, anxious -> 2.47, angry -> 2.63, lonely -> 9.22, happy -> 2.55
