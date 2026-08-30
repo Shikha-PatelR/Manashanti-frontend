@@ -1,219 +1,227 @@
 import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL =
+  import.meta.env.VITE_API_URL || "https://manashanti-backend.vercel.app";
 
 function App() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleAsk = async () => {
-    if (!input.trim()) return;
+    const text = input.trim();
+
+    if (!text || loading) return;
 
     setLoading(true);
+    setError("");
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/ask`, {
+      const response = await fetch(`${API_URL}/ask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: input,
+          text: text,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
+        throw new Error(`Server error: ${response.status}`);
       }
 
       const data = await response.json();
 
       setHistory((prev) => [
-        { question: input, answer: data },
+        {
+          question: text,
+          answer: data,
+        },
         ...prev,
       ]);
 
       setInput("");
-    } catch (error) {
-      console.error("Backend Error:", error);
+    } catch (err) {
+      console.error("ManaShanti API error:", err);
 
-      setHistory((prev) => [
-        {
-          question: input,
-          answer: {
-            counselor_response:
-              "Backend se connection nahi ho paaya. Please try again.",
-          },
-        },
-        ...prev,
-      ]);
+      setError(
+        "ManaShanti se connection nahi ho paaya. Please thodi der baad try karein."
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleAsk();
+    }
+  };
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(to right, #ffecd2, #fcb69f)",
-        padding: "20px",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
-      <h1 style={{ textAlign: "center", color: "#e65100ef" }}>
-        🧘 ManaShanti - Ask Gita
-      </h1>
+    <div className="mana-app">
+      {/* Header */}
+      <header className="mana-header">
+        <div className="mana-logo">🧘</div>
 
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <div
-          style={{
-            background: "linear-gradient(to right, #ffe0b2, #fff9c4)",
-            padding: "10px",
-            borderRadius: "12px",
-            border: "1px solid #ffcc80",
-            display: "inline-block",
-          }}
-        >
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#4a2c00",
-            }}
-          >
-            "Arjun jaisa confusion,{" "}
-            <span style={{ color: "#e65100" }}>
-              Krishna jaisa solution"
-            </span>{" "}
-            ✨
-          </p>
+        <h1>ManaShanti</h1>
+
+        <p className="mana-subtitle">
+          A peaceful space to share what is on your mind.
+        </p>
+
+        <div className="gita-quote">
+          "Arjun jaisa confusion, Krishna jaisa solution" ✨
         </div>
-      </div>
+      </header>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-          marginTop: "20px",
-        }}
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleAsk()}
-          placeholder="Share your feeling... anxious, sad, angry"
-          style={{
-            padding: "12px",
-            width: "60%",
-            borderRadius: "12px",
-            border: "1px solid #ccc",
-            fontSize: "16px",
-          }}
-        />
+      <main className="chat-container">
+        {/* Ask box */}
+        <section className="ask-card">
+          <div className="ask-row">
+            <input
+              className="ask-input"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Share your feelings..."
+              disabled={loading}
+              aria-label="Share your feelings"
+            />
 
-        <button
-          onClick={handleAsk}
-          disabled={loading}
-          style={{
-            padding: "12px 20px",
-            borderRadius: "12px",
-            border: "none",
-            background: "#4a2c2a",
-            color: "white",
-            fontSize: "16px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Loading..." : "Ask"}
-        </button>
-      </div>
+            <button
+              className="ask-button"
+              onClick={handleAsk}
+              disabled={loading || !input.trim()}
+            >
+              {loading ? "Thinking..." : "Ask"}
+            </button>
+          </div>
 
-      {history.length > 0 && (
-        <button
-          onClick={() => setHistory([])}
-          style={{
-            display: "block",
-            margin: "20px auto",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            border: "none",
-            background: "#ff6b6b",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Clear History 🗑️
-        </button>
-      )}
-
-      <div
-        style={{
-          marginTop: "40px",
-          maxWidth: "700px",
-          margin: "40px auto",
-        }}
-      >
-        {history.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "16px",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-              marginBottom: "20px",
-              color: "#333",
-            }}
-          >
-            <p>
-              <b>🙋 You:</b> {item.question}
-            </p>
-
-            <hr style={{ margin: "10px 0" }} />
-
-            <p>
-              <b>🧠 ManaShanti:</b>{" "}
-              {item.answer.counselor_response || "Loading..."}
-            </p>
-
-            <p>
-              <b>📖 Sanskrit:</b>{" "}
-              {item.answer.sanskrit || "Not available"}
-            </p>
-
-            <p>
-              <b>🇮🇳 Hindi:</b>{" "}
-              {item.answer.hindi || "Not available"}
-            </p>
-
-            <p>
-              <b>🇬🇧 English:</b>{" "}
-              {item.answer.english || "Not available"}
-            </p>
-
-            <p>
-              <b>📚 Reference:</b>{" "}
-              Chapter {item.answer.chapter || "-"}, Verse{" "}
-              {item.answer.verse || "-"}
-            </p>
-
+          {error && (
             <p
               style={{
-                fontSize: "12px",
-                color: "#888",
-                marginTop: "5px",
+                marginTop: "12px",
+                color: "#a34d42",
+                fontSize: "14px",
               }}
             >
-              Source: {item.answer.source || "Gita DB"} | Emotion:{" "}
-              {item.answer.detected_emotion || ""}
+              {error}
+            </p>
+          )}
+        </section>
+
+        {/* Empty state */}
+        {history.length === 0 && !loading && (
+          <div className="empty-state">
+            <div className="empty-icon">🌿</div>
+
+            <h2>Take a moment to breathe</h2>
+
+            <p>
+              Share what you're feeling, and ManaShanti will listen.
             </p>
           </div>
-        ))}
-      </div>
+        )}
+
+        {/* Conversation history */}
+        <section className="conversation">
+          {history.map((item, index) => {
+            const answer = item.answer;
+
+            return (
+              <div key={index}>
+                {/* User message */}
+                <div className="user-message">
+                  <div className="user-bubble">
+                    <span className="user-label">🙋 You</span>
+                    {item.question}
+                  </div>
+                </div>
+
+                {/* Counselor response */}
+                <article className="counselor-card">
+                  <div className="counselor-header">
+                    <div className="counselor-avatar">🧘</div>
+
+                    <div className="counselor-name">
+                      ManaShanti
+                    </div>
+
+                    {answer.detected_emotion && (
+                      <div className="emotion-badge">
+                        {answer.detected_emotion}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="counselor-body">
+                    <div className="counselor-response">
+                      {answer.counselor_response ||
+                        "ManaShanti could not generate a response."}
+                    </div>
+
+                    {/* Gita Wisdom */}
+                    {answer.sanskrit && (
+                      <div className="gita-card">
+                        <div className="gita-title">
+                          📖 Bhagavad Gita Wisdom
+                        </div>
+
+                        <div className="gita-sanskrit">
+                          {answer.sanskrit}
+                        </div>
+
+                        {answer.hindi && (
+                          <p className="gita-meaning">
+                            <strong>🇮🇳 Hindi:</strong>{" "}
+                            {answer.hindi}
+                          </p>
+                        )}
+
+                        {answer.english && (
+                          <p className="gita-meaning">
+                            <strong>🇬🇧 English:</strong>{" "}
+                            {answer.english}
+                          </p>
+                        )}
+
+                        {answer.chapter && answer.verse && (
+                          <div className="gita-reference">
+                            📚 Chapter {answer.chapter}, Verse{" "}
+                            {answer.verse}
+                            {answer.source && (
+                              <>
+                                {" • "}
+                                {answer.source}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </article>
+              </div>
+            );
+          })}
+        </section>
+
+        {/* Clear history */}
+        {history.length > 0 && (
+          <div className="history-actions">
+            <button
+              className="clear-button"
+              onClick={() => setHistory([])}
+            >
+              🗑️ Clear conversation
+            </button>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

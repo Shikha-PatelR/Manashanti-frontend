@@ -1,111 +1,396 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #3f3a36;
+  background: #fff8f0;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --primary: #8b5e3c;
+  --primary-dark: #65432d;
+  --cream: #fff8f0;
+  --card: #ffffff;
+  --soft: #f7eadc;
+  --border: #ead9c7;
+  --text: #3f3a36;
+  --muted: #7d746d;
+  --gold: #c8943e;
+  --shadow: 0 10px 30px rgba(92, 65, 42, 0.10);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 225, 190, 0.55), transparent 35%),
+    linear-gradient(135deg, #fffaf5 0%, #fff3e5 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Main application */
+
+.mana-app {
+  min-height: 100vh;
+  padding: 28px 18px 50px;
+}
+
+/* Header */
+
+.mana-header {
   text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  max-width: 850px;
+  margin: 0 auto 28px;
+}
+
+.mana-logo {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a9784d, #765034);
+  color: white;
+  font-size: 32px;
+  box-shadow: 0 8px 22px rgba(101, 67, 45, 0.22);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.mana-header h1 {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+.mana-subtitle {
+  margin: 8px 0 16px;
+  color: var(--muted);
+  font-size: 16px;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
+
+.gita-quote {
+  display: inline-block;
+  padding: 11px 18px;
+  border: 1px solid #ead1b4;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff1d9, #fff9ed);
+  color: #65432d;
+  font-weight: 600;
+}
+
+/* Chat container */
+
+.chat-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* Input area */
+
+.ask-card {
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 15px;
+  z-index: 5;
+}
+
+.ask-row {
+  display: flex;
+  gap: 10px;
+}
+
+.ask-input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 17px;
+  border: 1px solid #dcc8b5;
+  border-radius: 14px;
+  outline: none;
+  background: #fffdfb;
+  color: var(--text);
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.ask-input:focus {
+  border-color: #a9784d;
+  box-shadow: 0 0 0 3px rgba(169, 120, 77, 0.12);
+}
+
+.ask-input::placeholder {
+  color: #a49a91;
+}
+
+.ask-button {
+  min-width: 100px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #8b5e3c, #6d482f);
+  color: white;
+  font-weight: 700;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ask-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(101, 67, 45, 0.22);
+}
+
+.ask-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* History */
+
+.history-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 16px 0;
+}
+
+.clear-button {
+  border: 1px solid #e7b9b0;
+  background: #fff5f3;
+  color: #a34d42;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.clear-button:hover {
+  background: #ffe9e5;
+}
+
+/* Conversation */
+
+.conversation {
+  margin-top: 24px;
+}
+
+.user-message {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.user-bubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 18px 18px 5px 18px;
+  background: #8b5e3c;
+  color: white;
+  line-height: 1.55;
+  box-shadow: 0 5px 14px rgba(101, 67, 45, 0.12);
+}
+
+.user-label {
+  font-size: 12px;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* Counselor card */
+
+.counselor-card {
+  margin-bottom: 26px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.counselor-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  background: linear-gradient(135deg, #fff4e5, #fffaf4);
+  border-bottom: 1px solid #efdfce;
+}
+
+.counselor-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0dfc9;
+  font-size: 21px;
+}
+
+.counselor-name {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.emotion-badge {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f7eadc;
+  color: #79583d;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.counselor-body {
+  padding: 20px;
+}
+
+.counselor-response {
+  color: #514943;
+  font-size: 16px;
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+/* Gita wisdom */
+
+.gita-card {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fffaf0, #fff3dd);
+  border: 1px solid #ead7b9;
+}
+
+.gita-title {
+  color: #76512f;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.gita-sanskrit {
+  padding: 15px;
+  margin-bottom: 13px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  color: #593c29;
+  font-size: 18px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.gita-meaning {
+  margin-top: 10px;
+  color: #5f554e;
+  line-height: 1.6;
+}
+
+.gita-reference {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #8a7562;
+}
+
+/* Empty state */
+
+.empty-state {
+  text-align: center;
+  padding: 45px 20px;
+  color: var(--muted);
+}
+
+.empty-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.empty-state h2 {
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  color: var(--primary-dark);
+  font-size: 22px;
 }
-p {
+
+.empty-state p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+/* Responsive */
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+@media (max-width: 650px) {
+  .mana-app {
+    padding: 18px 12px 35px;
+  }
+
+  .mana-logo {
+    width: 58px;
+    height: 58px;
+    font-size: 27px;
+  }
+
+  .mana-subtitle {
+    font-size: 14px;
+  }
+
+  .gita-quote {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  .ask-card {
+    padding: 12px;
+    border-radius: 17px;
+  }
+
+  .ask-row {
+    gap: 7px;
+  }
+
+  .ask-input {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .ask-button {
+    min-width: 75px;
+    padding: 10px 12px;
+  }
+
+  .user-bubble {
+    max-width: 88%;
+  }
+
+  .counselor-body {
+    padding: 15px;
+  }
+
+  .counselor-response {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .gita-sanskrit {
+    font-size: 16px;
+  }
 }
